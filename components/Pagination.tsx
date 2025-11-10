@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 interface PaginationProps {
   currentPage: number;
@@ -6,63 +7,114 @@ interface PaginationProps {
   basePath: string;
 }
 
-export default function Pagination({ currentPage, totalPages, basePath }: PaginationProps) {
-  const pageNumbers = [];
-  const maxPagesToShow = 3;
+const PaginationLink = ({
+  href,
+  children,
+  isActive,
+  isDisabled,
+  className,
+}: {
+  href: string;
+  children: React.ReactNode;
+  isActive?: boolean;
+  isDisabled?: boolean;
+  className?: string;
+}) => {
+  const baseClasses =
+    'flex items-center justify-center px-4 h-10 text-sm font-medium transition-colors duration-200';
+  const activeClasses = 'z-10 bg-green-600 border-green-600 text-white';
+  const defaultClasses = 'leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700';
+  const disabledClasses = 'pointer-events-none text-gray-400 bg-gray-50';
 
-  let startPage = Math.max(1, currentPage - 1);
-  const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-
-  if (endPage - startPage + 1 < maxPagesToShow) {
-    startPage = Math.max(1, endPage - maxPagesToShow + 1);
-  }
-
-  for (let i = startPage; i <= endPage; i++) {
-    pageNumbers.push(i);
+  if (isDisabled) {
+    return <span className={cn(baseClasses, defaultClasses, disabledClasses, className)}>{children}</span>;
   }
 
   return (
-    <div className="flex justify-end mt-10">
-      <nav aria-label="Pagination">
-        <ul className="inline-flex items-center -space-x-px rounded-md shadow-sm">
-          <li>
-            <Link
-              href={`${basePath}&page=${currentPage - 1}`}
-              className={`inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 ${
-                currentPage === 1 ? 'pointer-events-none text-gray-300' : ''
-              }`}
-            >
-              <span className="sr-only">Previous</span>
-              &laquo;
-            </Link>
-          </li>
-          {pageNumbers.map((number) => (
-            <li key={number}>
-              <Link
-                href={`${basePath}&page=${number}`}
-                className={`inline-flex items-center px-4 py-2 text-sm font-medium ${
-                  currentPage === number
-                    ? 'text-white bg-accent border border-accent'
-                    : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
-                }`}
+    <Link
+      href={href}
+      className={cn(baseClasses, isActive ? activeClasses : defaultClasses, className)}
+    >
+      {children}
+    </Link>
+  );
+};
+
+export default function Pagination({ currentPage, totalPages, basePath }: PaginationProps) {
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5;
+    const ellipsis = '...';
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      pageNumbers.push(1);
+      if (currentPage > 3) {
+        pageNumbers.push(ellipsis);
+      }
+
+      let start = Math.max(2, currentPage - 1);
+      let end = Math.min(totalPages - 1, currentPage + 1);
+
+      if (currentPage <= 2) {
+        start = 2;
+        end = 4;
+      }
+      if (currentPage >= totalPages - 1) {
+        start = totalPages - 3;
+        end = totalPages - 1;
+      }
+
+      for (let i = start; i <= end; i++) {
+        pageNumbers.push(i);
+      }
+
+      if (currentPage < totalPages - 2) {
+        pageNumbers.push(ellipsis);
+      }
+      pageNumbers.push(totalPages);
+    }
+    return pageNumbers;
+  };
+
+  const pageNumbers = getPageNumbers();
+
+  return (
+    <nav aria-label="Pagination">
+      <ul className="inline-flex items-center -space-x-px text-sm">
+        {pageNumbers.map((page, index) => (
+          <li key={index}>
+            {typeof page === 'number' ? (
+              <PaginationLink
+                href={`${basePath}?page=${page}`}
+                isActive={currentPage === page}
               >
-                {number}
-              </Link>
-            </li>
-          ))}
-          <li>
-            <Link
-              href={`${basePath}&page=${currentPage + 1}`}
-              className={`inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 ${
-                currentPage === totalPages ? 'pointer-events-none text-gray-300' : ''
-              }`}
-            >
-              <span className="sr-only">Next</span>
-              &raquo;
-            </Link>
+                {page}
+              </PaginationLink>
+            ) : (
+              <span className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300">
+                {page}
+              </span>
+            )}
           </li>
-        </ul>
-      </nav>
-    </div>
+        ))}
+        <li>
+          <PaginationLink
+            href={`${basePath}?page=${currentPage + 1}`}
+            isDisabled={currentPage >= totalPages}
+            className="rounded-r-lg"
+          >
+            Next
+          </PaginationLink>
+        </li>
+      </ul>
+    </nav>
   );
 }

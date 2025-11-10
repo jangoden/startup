@@ -5,6 +5,7 @@ import type {
   NewsApiArticle,
   NewsApiErrorResponse,
   InternalApiErrorResponse,
+  FetchNewsDataResult,
 } from './types';
 
 function mapNewsArticleToPostCard(article: NewsApiArticle): PostCardProps {
@@ -23,34 +24,38 @@ function mapNewsArticleToPostCard(article: NewsApiArticle): PostCardProps {
   };
 }
 
-export async function fetchNewsData(queryParams?: string): Promise<PostCardProps[]> {
+export async function fetchNewsData(queryParams?: string): Promise<FetchNewsDataResult> {
+  const defaultResult: FetchNewsDataResult = { posts: [], totalResults: 0 };
   try {
     const apiKey = process.env.NEWS_API_KEY;
     if (!apiKey) {
       console.error('NEWS_API_KEY is not set.');
-      return [];
+      return defaultResult;
     }
     
-    const query = queryParams || 'q=teknologi&language=id&pageSize=12';
+    const query = queryParams || 'q=teknologi&language=id&pageSize=9';
     const apiUrl = `https://newsapi.org/v2/everything?${query}&apiKey=${apiKey}`;
 
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, { next: { revalidate: 3600 } }); // Revalidate every hour
     if (!response.ok) {
       console.error(`Failed to fetch from NewsAPI: ${response.statusText}`);
-      return [];
+      return defaultResult;
     }
 
     const data: NewsApiResponse | NewsApiErrorResponse = await response.json();
 
     if (data.status !== 'ok') {
       console.error(`NewsAPI returned an error: ${data.message}`);
-      return [];
+      return defaultResult;
     }
 
-    return data.articles.map(mapNewsArticleToPostCard);
+    return {
+      posts: data.articles.map(mapNewsArticleToPostCard),
+      totalResults: data.totalResults,
+    };
   } catch (error) {
     console.error('Error in fetchNewsData:', error);
-    return [];
+    return defaultResult;
   }
 }
 
@@ -81,29 +86,5 @@ export async function getPosts(): Promise<PostCardProps[]> {
   } catch (error) {
     console.error('Error in getPosts:', error);
     return [];
-  }
-}
-
-export async function fetchSingleNews(slug: string): Promise<PostCardProps | null> {
-  try {
-    // The slug is a URL, so we search for it directly.
-    // We must decode it as it comes from the URL path.
-    const decodedUrl = decodeURIComponent(slug);
-    
-    // We construct a precise query. Searching for the URL in the title is unlikely to work.
-    // A general search for the URL is the best approach.
-    const queryParams = `q="${decodedUrl}"&limit=1`;
-    
-    const articles = await fetchNewsData(queryParams);
-
-    if (articles.length > 0) {
-      // Return the first and most relevant article
-      return articles[0];
-    }
-
-    return null;
-  } catch (error) {
-    console.error(`Error in fetchSingleNews for slug: ${slug}`, error);
-    return null;
   }
 }

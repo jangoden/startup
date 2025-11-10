@@ -2,21 +2,28 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
-import { fetchSingleNews } from '@/lib/data';
+import { fetchNewsData } from '@/lib/data'; // Diubah dari fetchSingleNews
 import { siteConfig } from '@/lib/config';
 import PageHeader from '@/components/PageHeader';
-import JsonLd from '@/components/blog/json-ld'; // Import komponen JSON-LD
+import JsonLd from '@/components/blog/json-ld';
 
 type Props = {
   params: { slug: string };
 };
 
-// Langkah 2: Implementasi Metadata Dinamis
+// Helper function to get a single post to avoid repetition
+async function getPost(slug: string) {
+  // Fetch a larger list to increase the chance of finding the post
+  const { posts } = await fetchNewsData('q=teknologi&language=id&pageSize=100');
+  const decodedSlug = decodeURIComponent(slug);
+  const post = posts.find((p) => p.slug === decodedSlug);
+  return post;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await fetchSingleNews(params.slug);
+  const post = await getPost(params.slug);
 
   if (!post) {
-    // Jika tidak ada post, kita bisa kembalikan metadata default atau tidak sama sekali
     return {
       title: 'Artikel Tidak Ditemukan',
       description: 'Artikel yang Anda cari tidak dapat ditemukan.',
@@ -52,11 +59,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Langkah 1: Refactor Halaman Blog menjadi Server Component
 export default async function PostPage({ params }: Props) {
-  const post = await fetchSingleNews(params.slug);
+  const post = await getPost(params.slug);
 
-  // Jika post tidak ditemukan, tampilkan halaman 404
   if (!post) {
     notFound();
   }
@@ -66,7 +71,6 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <>
-      {/* Langkah 3: Integrasi Data Terstruktur (JSON-LD) */}
       <JsonLd post={post} url={postUrl} />
       
       <main className="relative isolate overflow-hidden bg-white">

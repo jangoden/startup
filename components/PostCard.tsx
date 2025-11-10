@@ -8,16 +8,7 @@ export default function PostCard({ post }: { post: PostCardProps }) {
   return (
     <div className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md">
       <Link
-        href={{
-          pathname: `/blog/${encodeURIComponent(post.slug)}`,
-          query: {
-            title: post.title,
-            imageUrl: post.imageUrl,
-            author: post.author.name,
-            date: post.date,
-            excerpt: post.excerpt,
-          },
-        }}
+        href={`/blog/${encodeURIComponent(post.slug)}`}
       >
         <div className="relative block h-40 w-full">
           <Image
@@ -39,16 +30,7 @@ export default function PostCard({ post }: { post: PostCardProps }) {
 
         <h3 className="mb-2 text-lg font-bold leading-tight text-gray-900">
           <Link
-            href={{
-              pathname: `/blog/${encodeURIComponent(post.slug)}`,
-              query: {
-                title: post.title,
-                imageUrl: post.imageUrl,
-                author: post.author.name,
-                date: post.date,
-                excerpt: post.excerpt,
-              },
-            }}
+            href={`/blog/${encodeURIComponent(post.slug)}`}
             className="hover:text-green-600 transition-colors duration-200"
           >
             {post.title}

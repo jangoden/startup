@@ -53,3 +53,8 @@ export interface InternalApiErrorResponse {
   error: string;
 
 }
+
+export interface FetchNewsDataResult {
+  posts: PostCardProps[];
+  totalResults: number;
+}
