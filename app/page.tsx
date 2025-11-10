@@ -1,4 +1,5 @@
 // app/page.tsx
+import type { Metadata } from 'next'; // <-- 1. IMPORT Metadata
 import Hero from "@/components/Hero";
 import ServicesSummary from "@/components/ServicesSummary";
 import BlogList from "@/components/BlogList";
@@ -7,10 +8,39 @@ import LogoCarousel from "@/components/LogoCarousel";
 import CTASection from "@/components/CTASection";
 import Pricing from "@/components/Pricing";
 
-import { fetchNewsData } from "@/lib/data"; // Langsung fetch data di server
+import { fetchNewsData } from "@/lib/data";
+
+// <-- 2. TAMBAHKAN BLOK METADATA INI
+export const metadata: Metadata = {
+  title: 'Webkeun - Jasa Pembuatan Website & Solusi IT Profesional',
+  description: 'Partner transformasi digital Anda. Kami menyediakan jasa pembuatan website, aplikasi custom, dan optimasi SEO untuk mendorong pertumbuhan bisnis Anda.',
+  
+  // Bonus: Tambahkan OpenGraph untuk media sosial
+  openGraph: {
+    title: 'Webkeun - Jasa Pembuatan Website & Solusi IT Profesional',
+    description: 'Partner transformasi digital Anda. Kami menyediakan jasa pembuatan website, aplikasi custom, dan optimasi SEO untuk mendorong pertumbuhan bisnis Anda.',
+    url: 'https://webkeun.web.id', // <-- DOMAIN ANDA
+    siteName: 'webkeun',
+    images: [
+      {
+        url: 'https://webkeun.web.id/og-image.png', // <-- Ganti dengan URL gambar Anda
+        width: 1200,
+        height: 630,
+        alt: 'Webkeun - Solusi IT Profesional',
+      },
+    ],
+    locale: 'id_ID',
+    type: 'website',
+  },
+  // Bonus: Tambahkan canonical URL
+  alternates: {
+    canonical: 'https://webkeun.web.id', // <-- DOMAIN ANDA
+  },
+};
+// --- BATAS TAMBAHAN ---
+
 
 export default async function Home() {
-  // Fetch 3 berita terbaru langsung di server
   const { posts: recentPosts } = await fetchNewsData('q=teknologi&language=id&pageSize=3');
 
   return (
@@ -24,16 +54,9 @@ export default async function Home() {
       <section className="bg-gray-50 py-20 sm:py-28">
         <div className="container mx-auto px-6">
           <div className="text-center">
-            <p className="mb-3 font-semibold text-emerald-600">Blog Terbaru</p>
-            <h2 className="mb-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-5xl">
-              Wawasan & Berita dari Industri
-            </h2>
-            <p className="mx-auto max-w-2xl text-base sm:text-lg text-gray-600">
-              Ikuti perkembangan terbaru, tren teknologi, dan studi kasus dari tim kami.
-            </p>
+            {/* ...sisa kode Anda... */}
           </div>
           <div className="mt-16">
-            {/* Langsung render BlogList dengan data dari server */}
             <BlogList posts={recentPosts} />
           </div>
         </div>
