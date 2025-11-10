@@ -1,7 +1,5 @@
 // components/blog/json-ld.tsx
 
-"use client";
-
 import { PostCardProps } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 

@@ -83,3 +83,27 @@ export async function getPosts(): Promise<PostCardProps[]> {
     return [];
   }
 }
+
+export async function fetchSingleNews(slug: string): Promise<PostCardProps | null> {
+  try {
+    // The slug is a URL, so we search for it directly.
+    // We must decode it as it comes from the URL path.
+    const decodedUrl = decodeURIComponent(slug);
+    
+    // We construct a precise query. Searching for the URL in the title is unlikely to work.
+    // A general search for the URL is the best approach.
+    const queryParams = `q="${decodedUrl}"&limit=1`;
+    
+    const articles = await fetchNewsData(queryParams);
+
+    if (articles.length > 0) {
+      // Return the first and most relevant article
+      return articles[0];
+    }
+
+    return null;
+  } catch (error) {
+    console.error(`Error in fetchSingleNews for slug: ${slug}`, error);
+    return null;
+  }
+}

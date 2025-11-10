@@ -12,7 +12,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "IT Support Profesional",
+  title: "webkeun - Layanan IT Profesional",
   description: "Solusi IT untuk bisnis Anda",
 };
 
