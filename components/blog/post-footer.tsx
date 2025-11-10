@@ -1,6 +1,6 @@
 "use client";
 
-import { ApiPost } from "@/lib/types";
+import { PostCardProps } from "@/lib/types";
 import Link from "next/link";
 import {
   ArrowLeftIcon,
@@ -11,7 +11,7 @@ import { FaWhatsapp, FaFacebookF, FaInstagram } from "react-icons/fa";
 import { useState } from "react";
 
 interface PostFooterProps {
-  post: ApiPost;
+  post: PostCardProps;
   shareUrl: string;
 }
 
