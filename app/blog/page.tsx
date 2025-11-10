@@ -6,14 +6,17 @@ import { fetchNewsData } from "@/lib/data";
 const PAGE_SIZE = 9;
 
 type BlogPageProps = {
-  searchParams?: {
+  // di Next.js 15, kita anggap ini bisa berupa Promise
+  searchParams: Promise<{
     page?: string;
-  };
+  }>;
 };
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const currentPage = Number(searchParams?.page) || 1;
-  
+  // ✅ tunggu dulu sebelum dipakai
+  const resolvedSearchParams = await searchParams;
+  const currentPage = Number(resolvedSearchParams?.page) || 1;
+
   const { posts, totalResults } = await fetchNewsData(
     `q=teknologi&language=id&pageSize=${PAGE_SIZE}&page=${currentPage}`
   );
@@ -29,10 +32,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <div className="mx-auto max-w-screen-xl px-6 lg:px-8 py-10 sm:py-14">
         <BlogList posts={posts} />
         <div className="mt-12 flex justify-end">
-          <Pagination 
-            currentPage={currentPage} 
-            totalPages={totalPages} 
-            basePath="/blog" 
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            basePath="/blog"
           />
         </div>
       </div>

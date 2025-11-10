@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.siteUrl || "http://localhost:3000";
 
   // 1. Ambil data dinamis langsung dari sumbernya
-  const posts = await fetchNewsData(); // <-- Panggil fungsi sisi server
+  const { posts } = await fetchNewsData('pageSize=100'); // <-- Panggil fungsi sisi server dan destructure posts
   // const templates = await getAllTemplates(); // <-- Dinonaktifkan sementara
 
   const makeUrl = (path: string, updated_at?: string) => {
