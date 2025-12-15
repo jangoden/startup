@@ -45,9 +45,8 @@ export default function ServicesSummary() {
           <h2 className="mb-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-5xl">
             Solusi Digital untuk Setiap Kebutuhan
           </h2>
-          <p className="mx-auto max-w-2xl text-base sm:text-lg text-gray-600 px-4 sm:px-0 text-justify">
-            Kami menyediakan spektrum layanan yang luas untuk memastikan semua
-            aspek digital bisnis Anda tertangani dengan sempurna.
+          <p className="mx-auto max-w-2xl text-base sm:text-lg text-gray-600 px-4 sm:px-0 text-ceenter">
+            Kami menawarkan solusi digital terintegrasi agar bisnis Anda berjalan lebih efektif dan kompetitif.
           </p>
         </div>
 
