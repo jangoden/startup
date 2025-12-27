@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "@/components/Navbar";
@@ -7,9 +7,10 @@ import Footer from "@/components/Footer";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 import Script from 'next/script'; // <-- 1. IMPORT SCRIPT
 
-const poppins = Poppins({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
 });
 
 export const metadata: Metadata = {
@@ -26,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id">
-      <body className={poppins.className}>
+    <html lang="id" className="scroll-smooth">
+      <body className={`${plusJakarta.className} antialiased bg-slate-50 text-slate-800`}>
         
         {/* 3. TAMBAHKAN KODE GOOGLE ANALYTICS DI SINI */}
         <Script

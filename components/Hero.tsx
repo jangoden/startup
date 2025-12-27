@@ -1,4 +1,3 @@
-// components/Hero.tsx
 "use client";
 
 import Link from "next/link";
@@ -7,91 +6,72 @@ import heroAnimation from "@/public/animations/hero-animation.json";
 
 export default function Hero() {
   return (
-    <section className="relative isolate scroll-mt-[var(--header-h)] overflow-x-clip">
-      {/* ====== BACKDROP: grid halus + noise ====== */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-30 opacity-60"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(16,185,129,.25) 1px, transparent 1px),
-            linear-gradient(to bottom, hsla(160, 84%, 39%, 0.25) 1px, transparent 1px)
-          `,
-          backgroundSize: "20px 20px",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)",
-          maskImage:
-            "linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-30 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>\")",
-        }}
-      />
+    <section className="relative isolate pt-[var(--header-h)] overflow-hidden bg-slate-50">
+      {/* Background Gradients/Blobs */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-[10%] -left-[10%] h-[500px] w-[500px] rounded-full bg-emerald-300/20 blur-[100px] animate-blob" />
+        <div className="absolute top-[20%] -right-[10%] h-[500px] w-[500px] rounded-full bg-blue-300/20 blur-[100px] animate-blob animation-delay-2000" />
+        <div className="absolute -bottom-[10%] left-[20%] h-[500px] w-[500px] rounded-full bg-purple-300/20 blur-[100px] animate-blob animation-delay-4000" />
+      </div>
 
-      {/* ====== CONTENT ====== */}
-      <div className="container relative z-10 mx-auto grid grid-cols-1 items-center gap-y-10 px-6 py-14 sm:px-4 sm:py-16 lg:grid-cols-2 lg:gap-x-16 lg:px-8 lg:py-24">
-        {/* Left: text */}
-        <div
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          className="text-center sm:text-left"
-        >
-          <p className="inline-block rounded-full border border-emerald-500/30 bg-emerald-100/60 px-3 py-1 text-xs font-semibold text-emerald-700 sm:px-4 sm:py-1.5 sm:text-sm">
-            ♦ Partner Transformasi Digital
-          </p>
-
-          <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl lg:text-5xl">
-            Wujudkan Masa Depan
-            <span className="mt-1 block bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent sm:mt-2">
-              Bisnis Digital Anda
+      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 items-start gap-12 px-6 pt-4 pb-12 lg:py-12">
+        {/* Left: Text Content */}
+        <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-8">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-sm border border-slate-200">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
+            <span className="text-sm font-semibold text-slate-700">Partner Transformasi Digital</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.15] tracking-tight">
+            Transformasi Bisnis Anda Menjadi Go <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">Digital</span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-xl text-sm leading-6 text-gray-600 sm:mx-0 sm:mt-8 sm:text-lg sm:leading-8">
-            Kami merancang dan membangun solusi digital yang powerful mulai dari
-            website modern hingga aplikasi enterprise untuk mendorong
-            pertumbuhan dan efisiensi bisnis Anda.
+          <p className="text-lg text-slate-600 max-w-2xl leading-relaxed">
+            Kami membantu Anda membangun kehadiran digital yang kuat dengan website modern, aplikasi custom, dan strategi marketing yang terukur.
           </p>
 
-          <div className="mt-8 flex items-center justify-center sm:justify-start">
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
             <Link
               href="/contact"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-emerald-500 px-6 py-2.5 text-base font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:bg-emerald-600 hover:shadow-xl hover:shadow-emerald-500/40 sm:px-8 sm:py-3 sm:text-lg"
+              className="inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-white transition-all bg-slate-900 rounded-full hover:bg-slate-800 hover:shadow-lg hover:-translate-y-1"
             >
-              <span className="absolute left-0 top-0 h-full w-0 bg-white/20 transition-all duration-500 group-hover:w-full" />
-              <span className="relative">Mulai Konsultasi Gratis</span>
-              <span className="relative transition-transform duration-300 group-hover:translate-x-1.5">
-                →
-              </span>
+              Konsultasi Gratis
             </Link>
+            <Link
+              href="/services"
+              className="inline-flex items-center justify-center px-8 py-3.5 text-base font-bold text-slate-700 transition-all bg-white border border-slate-200 rounded-full hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm"
+            >
+              Lihat Layanan
+            </Link>
+          </div>
+
+          {/* Social Proof / Trust */}
+          <div className="pt-4 flex items-center gap-4 text-sm font-medium text-slate-500">
+            <div className="flex -space-x-3">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-8 w-8 rounded-full border-2 border-white bg-slate-200" />
+              ))}
+            </div>
+            <span>Dipercaya oleh 100+ Klien</span>
           </div>
         </div>
 
-        {/* Right: Lottie + GREEN GRADIENT BACKDROP */}
-        <div
-          data-aos="fade-left"
-          data-aos-duration="1000"
-          className="relative mx-auto flex w-full max-w-[560px] items-center justify-center"
-        >
-          {/* Elliptical green gradient behind the Lottie */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -inset-x-10 -inset-y-8 -z-10 rounded-[48px] blur-xl"
-            style={{
-              background:
-                "radial-gradient(120% 85% at 55% 40%, rgba(16, 185, 92, 0.77) 0%, rgba(16, 185, 67, 0.33) 35%, rgba(16,185,129,0.10) 60%, rgba(16,185,129,0.0) 80%)",
-            }}
-          />
-          <Lottie
-            animationData={heroAnimation}
-            loop
-            className="h-auto w-full"
-          />
+        {/* Right: Visual */}
+        <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
+          <div className="relative rounded-3xl bg-gradient-to-tr from-white to-slate-50 p-4 shadow-2xl ring-1 ring-slate-100 transform rotate-1 hover:rotate-0 transition-transform duration-500">
+            <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] -z-10" />
+            <Lottie
+              animationData={heroAnimation}
+              loop
+              className="w-full h-auto drop-shadow-xl"
+            />
+          </div>
+          {/* Decorative elements */}
+          <div className="absolute -top-12 -right-12 h-24 w-24 bg-primary/10 rounded-full blur-2xl animate-pulse-soft" />
+          <div className="absolute -bottom-10 -left-10 h-32 w-32 bg-blue-500/10 rounded-full blur-3xl animate-pulse-soft" />
         </div>
       </div>
     </section>
